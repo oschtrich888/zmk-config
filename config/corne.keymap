@@ -9,51 +9,223 @@
 #include <dt-bindings/zmk/bt.h>
 
 / {
-        keymap {
-                compatible = "zmk,keymap";
+  // Layer Enums
+  enum {
+    QWERTY = 0,
+    COLEMAK = 1,
+    NAV = 2,
+    NUMPAD = 3,
+    SYMLFT = 4,
+    SYMRGT = 5,
+    FUNCTN = 6,
+    BT = 7
+  };
 
-                default_layer {
-                        display-name = "Default Layer";
-// -----------------------------------------------------------------------------------------
-// |  TAB |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U   |  I  |  O  |  P  | BSPC |
-// | CTRL |  A  |  S  |  D  |  F  |  G  |   |  H  |  J   |  K  |  L  |  ;  |  '   |
-// | SHFT |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M   |  ,  |  .  |  /  | ESC  |
-//                    | GUI | LWR | SPC |   | ENT | RSE  | ALT |
-                        bindings = <
-   &kp TAB   &kp Q &kp W &kp E &kp R &kp T   &kp Y &kp U  &kp I     &kp O   &kp P    &kp BSPC
-   &kp LCTRL &kp A &kp S &kp D &kp F &kp G   &kp H &kp J  &kp K     &kp L   &kp SEMI &kp SQT
-   &kp LSHFT &kp Z &kp X &kp C &kp V &kp B   &kp N &kp M  &kp COMMA &kp DOT &kp FSLH &kp ESC
-                  &kp LGUI &mo 1 &kp SPACE   &kp RET &mo 2 &kp RALT
-                        >;
-                };
-                lower_layer {
-                        display-name = "Lower Layer";
-// -----------------------------------------------------------------------------------------
-// |  TAB |  1  |  2  |  3  |  4  |  5  |   |  6  |  7  |  8  |  9  |  0  | BSPC |
-// | BTCLR| BT1 | BT2 | BT3 | BT4 | BT5 |   | LFT | DWN |  UP | RGT |     |      |
-// | SHFT |     |     |     |     |     |   |     |     |     |     |     |      |
-//                    | GUI |     | SPC |   | ENT |     | ALT |
-                        bindings = <
-   &kp TAB    &kp N1       &kp N2       &kp N3       &kp N4       &kp N5         &kp N6   &kp N7   &kp N8 &kp N9    &kp N0 &kp BSPC
-   &bt BT_CLR &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4   &kp LEFT &kp DOWN &kp UP &kp RIGHT &trans &trans
-   &kp LSHFT  &trans       &trans       &trans       &trans       &trans         &trans   &trans   &trans &trans    &trans &trans
-                                    &kp LGUI     &trans       &kp SPACE      &kp RET  &trans   &kp RALT
-                        >;
-                };
+  behaviors {
+    hm: homerow_mods {
+      compatible = "zmk,behavior-hold-tap";
+      #binding-cells = <2>;
+      tapping-term-ms = <250>;
+      quick-tap-ms = <125>;
+      require-prior-idle-ms = <150>;
+      flavor = "tap-preferred";
+      bindings = <&kp>, <&kp>;
+    };
+  };
 
-                raise_layer {
-                        display-name = "Raise Layer";
-// -----------------------------------------------------------------------------------------
-// |  TAB |  !  |  @  |  #  |  $  |  %  |   |  ^  |  &  |  *  |  (  |  )  | BSPC |
-// | CTRL |     |     |     |     |     |   |  -  |  =  |  [  |  ]  |  \  |  `   |
-// | SHFT |     |     |     |     |     |   |  _  |  +  |  {  |  }  | "|" |  ~   |
-//                    | GUI |     | SPC |   | ENT |     | ALT |
-                        bindings = <
-   &kp  TAB  &kp EXCL &kp AT &kp HASH &kp DLLR &kp PRCNT   &kp CARET &kp AMPS  &kp ASTRK &kp LPAR &kp RPAR &kp BSPC
-   &kp LCTRL &trans   &trans &trans   &trans   &trans      &kp MINUS &kp EQUAL &kp LBKT  &kp RBKT &kp BSLH &kp GRAVE
-   &kp LSHFT &trans   &trans &trans   &trans   &trans      &kp UNDER &kp PLUS  &kp LBRC  &kp RBRC &kp PIPE &kp TILDE
-                             &kp LGUI &trans   &kp SPACE   &kp RET   &trans    &kp RALT
-                        >;
-                };
-        };
+  // Bluetooth Profile Shortcuts
+  #define BTP1 &bt BT_SEL 0
+  #define BTP2 &bt BT_SEL 1
+  #define BTP3 &bt BT_SEL 2
+  #define BTP4 &bt BT_SEL 3
+  #define BTP5 &bt BT_SEL 4
+  #define BTCLR &bt BT_CLR
+
+  // Homerow Mods Shortcuts
+  #define HMA &hm LGUI A
+  #define HMS &hm LALT S
+  #define HMD &hm LCTRL D
+  #define HMF &hm LSHFT F
+  #define HMJ &hm RSHFT J
+  #define HMK &hm RCTRL K
+  #define HML &hm RALT L
+  #define HMSC &hm RGUI SEMI
+
+  // Colemak Homerow Mods
+  #define COLA &hm LGUI A
+  #define COLR &hm LALT R
+  #define COLS &hm LCTRL S
+  #define COLT &hm LSHFT T
+  #define COLN &hm RSHFT N
+  #define COLE &hm RCTRL E
+  #define COLI &hm RALT I
+  #define COLO &hm RGUI O
+
+  // Layer Tap Shortcuts
+  #define LTBT &lt BT SPACE
+  #define LTNUM &lt NUMPAD ESC
+  #define LTNAV &lt NAV ENTER
+
+  // Mod Shortcuts
+  #define LSHT &kp LSHFT
+  #define RSFT &kp RSHFT
+  #define RCTL &kp RCTRL
+  #define RALT &kp RALT
+  #define RGUI &kp RGUI
+
+  keymap {
+    compatible = "zmk,keymap";
+
+    qwerty_layer {
+      display-name = "QWERTY";
+      // ┌────────────┬────────────┬────────────┬────────────┬────────────┬────────────┐     ┌────────────┬────────────┬────────────┬────────────┬────────────┬────────────┐
+      // │    ESC     │     Q      │     W      │     E      │     R      │     T      │     │     Y      │     U      │     I      │     O      │     P      │    ESC     │
+      // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
+      // │    TAB     │  A(GUI)    │  S(ALT)    │  D(CTRL)   │  F(SHFT)   │     G      │     │     H      │  J(SHFT)   │  K(CTRL)   │  L(ALT)    │  ;(GUI)    │   BSPC     │
+      // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
+      // │   SHFT     │     Z      │     X      │     C      │     V      │     B      │     │     N      │     M      │     ,      │     .      │     /      │    RET     │
+      // ├────────────┼────────────┼────────────┴────────────┼────────────┼────────────┤     ├────────────┼────────────┴────────────┼────────────┼────────────┼────────────┤
+      // │            │            │            │  SYMLFT    │ NAV/ENTER  │  SPC/BT    │     │    SPC     │ ESC/NUM    │  SYMRGT    │            │            │            │
+      // └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘     └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘
+      bindings = <
+        &kp ESC      &kp Q        &kp W        &kp E        &kp R        &kp T              &kp Y        &kp U        &kp I        &kp O        &kp P        &kp ESC
+        &kp TAB      HMA          HMS          HMD          HMF          &kp G              &kp H        HMJ          HMK          HML          HMSC         &kp BSPC
+        LSHT         &kp Z        &kp X        &kp C        &kp V        &kp B              &kp N        &kp M        &kp COMMA    &kp DOT      &kp FSLH     &kp RET
+                                               &mo SYMLFT   LTNAV        LTBT               &kp SPACE    LTNUM        &mo SYMRGT
+      >;
+    };
+
+    colemak_layer {
+      display-name = "COLEMAK";
+      // ┌────────────┬────────────┬────────────┬────────────┬────────────┬────────────┐     ┌────────────┬────────────┬────────────┬────────────┬────────────┬────────────┐
+      // │    ---     │     Q      │     W      │     F      │     P      │     B      │     │     J      │     L      │     U      │     Y      │     ;      │    ---     │
+      // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
+      // │    ---     │  A(GUI)    │  R(ALT)    │  S(CTRL)   │  T(SHFT)   │     G      │     │     M      │  N(SHFT)   │  E(CTRL)   │  I(ALT)    │  O(GUI)    │    ---     │
+      // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
+      // │    ---     │     Z      │     X      │     C      │     D      │     V      │     │     K      │     H      │     ,      │     .      │     /      │    ---     │
+      // ├────────────┼────────────┼────────────┴────────────┼────────────┼────────────┤     ├────────────┼────────────┴────────────┼────────────┼────────────┼────────────┤
+      // │            │            │            │    ---     │    ---     │    ---     │     │    ---     │    ---     │    ---     │            │            │            │
+      // └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘     └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘
+      bindings = <
+        &trans       &kp Q        &kp W        &kp F        &kp P        &kp B              &kp J        &kp L        &kp U        &kp Y        &kp SEMI     &trans
+        &trans       COLA         COLR         COLS         COLT         &kp G              &kp M        COLN         COLE         COLI         COLO         &trans
+        &trans       &kp Z        &kp X        &kp C        &kp D        &kp V              &kp K        &kp H        &kp COMMA    &kp DOT      &kp FSLH     &trans
+                                               &trans       &trans       &trans             &trans       &trans       &trans
+      >;
+    };
+
+    navigate_layer {
+      display-name = "NAV";
+      // ┌────────────┬────────────┬────────────┬────────────┬────────────┬────────────┐     ┌────────────┬────────────┬────────────┬────────────┬────────────┬────────────┐
+      // │    ---     │    ---     │    ---     │    ---     │    ---     │    ---     │     │    ---     │    ---     │    ---     │    ---     │    ---     │    ---     │
+      // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
+      // │    ---     │    ---     │    ---     │    ---     │    ---     │    ---     │     │    ---     │    LEFT    │    DOWN    │     UP     │    RIGHT   │    ---     │
+      // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
+      // │    ---     │    ---     │   S+TAB    │    ALT     │    TAB     │    ---     │     │    ---     │    HOME    │    PGDN    │    PGUP    │    END     │    ---     │
+      // ├────────────┼────────────┼────────────┴────────────┼────────────┼────────────┤     ├────────────┼────────────┴────────────┼────────────┼────────────┼────────────┤
+      // │            │            │            │    ---     │    ---     │    ---     │     │    ---     │    ---     │    ---     │            │            │            │
+      // └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘     └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘
+      bindings = <
+        &trans       &trans       &trans       &trans       &trans       &trans             &trans       &trans       &trans       &trans       &trans       &trans
+        &trans       &trans       &trans       &trans       &trans       &trans             &trans       &kp LEFT     &kp DOWN     &kp UP       &kp RIGHT    &trans
+        &trans       &trans       &kp LS(TAB)  &kp LALT     &kp TAB      &trans             &trans       &kp HOME     &kp PGDN     &kp PGUP     &kp END      &trans
+                                               &trans       &trans       &trans             &trans       &trans       &trans
+      >;
+    };
+
+    numpad_layer {
+      display-name = "NUMPAD";
+      // ┌────────────┬────────────┬────────────┬────────────┬────────────┬────────────┐     ┌────────────┬────────────┬────────────┬────────────┬────────────┬────────────┐
+      // │    ---     │    PSLS    │     7      │     8      │     9      │    PMNS    │     │    ---     │    ---     │    ---     │    ---     │    ---     │    ---     │
+      // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
+      // │    ---     │     0      │     1      │     2      │     3      │   BSPC     │     │    ---     │   RSHFT    │   RCTRL    │    RALT    │    RGUI    │    ---     │
+      // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
+      // │    ---     │   PDOT     │     4      │     5      │     6      │    EQL     │     │    ---     │    HOME    │    PGDN    │    PGUP    │    END     │    ---     │
+      // ├────────────┼────────────┼────────────┴────────────┼────────────┼────────────┤     ├────────────┼────────────┴────────────┼────────────┼────────────┼────────────┤
+      // │            │            │            │    ---     │    ---     │    ---     │     │    ---     │    ---     │    ---     │            │            │            │
+      // └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘     └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘
+      bindings = <
+        &trans       &kp PSLS     &kp N7       &kp N8       &kp N9       &kp PMNS           &trans       &trans       &trans       &trans       &trans       &trans
+        &trans       &kp N0       &kp N1       &kp N2       &kp N3       &kp BSPC           &trans       RSFT         RCTL         RALT         RGUI         &trans
+        &trans       &kp PDOT     &kp N4       &kp N5       &kp N6       &kp EQUAL          &trans       &kp HOME     &kp PGDN     &kp PGUP     &kp END      &trans
+                                               &trans       &trans       &trans             &trans       &trans       &trans
+      >;
+    };
+
+    symbol_left_layer {
+      display-name = "SYMLFT";
+      // ┌────────────┬────────────┬────────────┬────────────┬────────────┬────────────┐     ┌────────────┬────────────┬────────────┬────────────┬────────────┬────────────┐
+      // │    ---     │    ---     │     :      │     <      │     >      │    ---     │     │    ---     │    ---     │    ---     │    ---     │    ---     │    ---     │
+      // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
+      // │    ---     │     {      │     }      │     (      │     )      │     @      │     │     _      │     -      │     =      │     +      │     %      │    ---     │
+      // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
+      // │    ---     │    ---     │     !      │     [      │     ]      │    ---     │     │    ---     │    ---     │    ---     │    ---     │    ---     │    ---     │
+      // ├────────────┼────────────┼────────────┴────────────┼────────────┼────────────┤     ├────────────┼────────────┴────────────┼────────────┼────────────┼────────────┤
+      // │            │            │            │    ---     │    ---     │    ---     │     │    ---     │    ---     │    ---     │            │            │            │
+      // └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘     └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘
+      bindings = <
+        &trans       &trans       &kp COLON    &kp LT       &kp GT       &trans             &trans       &trans       &trans       &trans       &trans       &trans
+        &trans       &kp LBRC     &kp RBRC     &kp LPAR     &kp RPAR     &kp AT             &kp UNDER    &kp MINUS    &kp EQUAL    &kp PLUS     &kp PERCENT  &trans
+        &trans       &trans       &kp EXCL     &kp LBKT     &kp RBKT     &trans             &trans       &trans       &trans       &trans       &trans       &trans
+                                               &trans       &trans       &trans             &trans       &trans       &trans
+      >;
+    };
+
+    symbol_right_layer {
+      display-name = "SYMRGT";
+      // ┌────────────┬────────────┬────────────┬────────────┬────────────┬────────────┐     ┌────────────┬────────────┬────────────┬────────────┬────────────┬────────────┐
+      // │    ---     │    ---     │    ---     │    ---     │    ---     │    ---     │     │    ---     │    ---     │    ---     │    ---     │    ---     │    ---     │
+      // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
+      // │    ---     │     ^      │     *      │     &      │     ?      │    ---     │     │     #      │     ~      │     /      │     "      │     $      │    ---     │
+      // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
+      // │    ---     │    ---     │    ---     │    ---     │    ---     │    ---     │     │    ---     │    ---     │     \      │     `      │    ---     │    ---     │
+      // ├────────────┼────────────┼────────────┴────────────┼────────────┼────────────┤     ├────────────┼────────────┴────────────┼────────────┼────────────┼────────────┤
+      // │            │            │            │    ---     │    ---     │    ---     │     │    ---     │    ---     │    ---     │            │            │            │
+      // └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘     └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘
+      bindings = <
+        &trans       &trans       &trans       &trans       &trans       &trans             &trans       &trans       &trans       &trans       &trans       &trans
+        &trans       &kp CARET    &kp ASTRK    &kp AMPS     &kp QMARK    &trans             &kp HASH     &kp TILDE    &kp FSLH     &kp DQT      &kp DLLR     &trans
+        &trans       &trans       &trans       &trans       &trans       &trans             &trans       &trans       &kp BSLH     &kp GRAVE    &trans       &trans
+                                               &trans       &trans       &trans             &trans       &trans       &trans
+      >;
+    };
+
+    function_layer {
+      display-name = "FUNCTN";
+      // ┌────────────┬────────────┬────────────┬────────────┬────────────┬────────────┐     ┌────────────┬────────────┬────────────┬────────────┬────────────┬────────────┐
+      // │    ---     │     F9     │    F10     │    F11     │    F12     │    ---     │     │    ---     │    ---     │    ---     │    ---     │    ---     │    ---     │
+      // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
+      // │    ---     │    GUI     │     F1     │     F2     │     F3     │     F4     │     │    ---     │   RSHFT    │   RCTRL    │    RALT    │    RGUI    │    ---     │
+      // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
+      // │    ---     │    ---     │     F5     │     F6     │     F7     │     F8     │     │    ---     │    HOME    │    PGDN    │    PGUP    │    END     │    ---     │
+      // ├────────────┼────────────┼────────────┴────────────┼────────────┼────────────┤     ├────────────┼────────────┴────────────┼────────────┼────────────┼────────────┤
+      // │            │            │            │    ---     │    ---     │    ---     │     │    ---     │    ---     │    ---     │            │            │            │
+      // └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘     └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘
+      bindings = <
+        &trans       &kp F9       &kp F10      &kp F11      &kp F12      &trans             &trans       &trans       &trans       &trans       &trans       &trans
+        &trans       &kp LGUI     &kp F1       &kp F2       &kp F3       &kp F4             &trans       RSFT         RCTL         RALT         RGUI         &trans
+        &trans       &trans       &kp F5       &kp F6       &kp F7       &kp F8             &trans       &kp HOME     &kp PGDN     &kp PGUP     &kp END      &trans
+                                               &trans       &trans       &trans             &trans       &trans       &trans
+      >;
+    };
+
+    bluetooth_layer {
+      display-name = "BT";
+      // ┌────────────┬────────────┬────────────┬────────────┬────────────┬────────────┐     ┌────────────┬────────────┬────────────┬────────────┬────────────┬────────────┐
+      // │    ---     │    BTP1    │    BTP2    │    BTP3    │    BTP4    │    BTP5    │     │    ---     │    ---     │    ---     │    ---     │    ---     │    BTCLR   │
+      // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
+      // │    ---     │    ---     │    ---     │    ---     │    ---     │    ---     │     │    ---     │    ---     │    ---     │    ---     │    ---     │    ---     │
+      // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
+      // │    ---     │    ---     │    ---     │    ---     │    ---     │    ---     │     │    ---     │    ---     │    ---     │    ---     │    ---     │    ---     │
+      // ├────────────┼────────────┼────────────┴────────────┼────────────┼────────────┤     ├────────────┼────────────┴────────────┼────────────┼────────────┼────────────┤
+      // │            │            │            │    ---     │    ---     │    ---     │     │    ---     │    ---     │    ---     │            │            │            │
+      // └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘     └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘
+      bindings = <
+        &trans       BTP1         BTP2         BTP3         BTP4         BTP5               &trans       &trans       &trans       &trans       &trans       BTCLR
+        &trans       &trans       &trans       &trans       &trans       &trans             &trans       &trans       &trans       &trans       &trans       &trans
+        &trans       &trans       &trans       &trans       &trans       &trans             &trans       &trans       &trans       &trans       &trans       &trans
+                                               &trans       &trans       &trans             &trans       &trans       &trans
+      >;
+    };
+  };
 };

@@ -9,17 +9,15 @@
 #include <dt-bindings/zmk/bt.h>
 
 / {
-  // Layer Enums
-  enum {
-    QWERTY = 0,
-    COLEMAK = 1,
-    NAV = 2,
-    NUMPAD = 3,
-    SYMLFT = 4,
-    SYMRGT = 5,
-    FUNCTN = 6,
-    BT = 7
-  };
+  // Layer Definitions (replaced enum with #define for devicetree compatibility)
+  #define QWERTY 0
+  #define COLEMAK 1
+  #define NAV 2
+  #define NUMPAD 3
+  #define SYMLFT 4
+  #define SYMRGT 5
+  #define FUNCTN 6
+  #define BT 7
 
   behaviors {
     hm: homerow_mods {
@@ -56,7 +54,7 @@
   #define COLR &hm LALT R
   #define COLS &hm LCTRL S
   #define COLT &hm LSHFT T
-  #define COLN &hm RSHFT N
+  #define COLHN &hm RSHFT N  // Renamed from COLN to avoid conflict with deprecated ZMK macro
   #define COLE &hm RCTRL E
   #define COLI &hm RALT I
   #define COLO &hm RGUI O
@@ -66,12 +64,12 @@
   #define LTNUM &lt NUMPAD ESC
   #define LTNAV &lt NAV ENTER
 
-  // Mod Shortcuts
+  // Mod Shortcuts (renamed to avoid conflicts with ZMK deprecated/reserved macros)
   #define LSHT &kp LSHFT
-  #define RSFT &kp RSHFT
-  #define RCTL &kp RCTRL
-  #define RALT &kp RALT
-  #define RGUI &kp RGUI
+  #define RSHFT_KP &kp RSHFT  // Renamed from RSFT
+  #define RCTRL_KP &kp RCTRL  // Renamed from RCTL
+  #define RALT_KP &kp RALT    // Renamed from RALT
+  #define RGUI_KP &kp RGUI    // Renamed from RGUI
 
   keymap {
     compatible = "zmk,keymap";
@@ -108,7 +106,7 @@
       // └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘     └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘
       bindings = <
         &trans       &kp Q        &kp W        &kp F        &kp P        &kp B              &kp J        &kp L        &kp U        &kp Y        &kp SEMI     &trans
-        &trans       COLA         COLR         COLS         COLT         &kp G              &kp M        COLN         COLE         COLI         COLO         &trans
+        &trans       COLA         COLR         COLS         COLT         &kp G              &kp M        COLHN        COLE         COLI         COLO         &trans
         &trans       &kp Z        &kp X        &kp C        &kp D        &kp V              &kp K        &kp H        &kp COMMA    &kp DOT      &kp FSLH     &trans
                                                &trans       &trans       &trans             &trans       &trans       &trans
       >;
@@ -146,7 +144,7 @@
       // └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘     └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘
       bindings = <
         &trans       &kp PSLS     &kp N7       &kp N8       &kp N9       &kp PMNS           &trans       &trans       &trans       &trans       &trans       &trans
-        &trans       &kp N0       &kp N1       &kp N2       &kp N3       &kp BSPC           &trans       RSFT         RCTL         RALT         RGUI         &trans
+        &trans       &kp N0       &kp N1       &kp N2       &kp N3       &kp BSPC           &trans       RSHFT_KP     RCTRL_KP     RALT_KP      RGUI_KP      &trans
         &trans       &kp PDOT     &kp N4       &kp N5       &kp N6       &kp EQUAL          &trans       &kp HOME     &kp PGDN     &kp PGUP     &kp END      &trans
                                                &trans       &trans       &trans             &trans       &trans       &trans
       >;
@@ -203,7 +201,7 @@
       // └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘     └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘
       bindings = <
         &trans       &kp F9       &kp F10      &kp F11      &kp F12      &trans             &trans       &trans       &trans       &trans       &trans       &trans
-        &trans       &kp LGUI     &kp F1       &kp F2       &kp F3       &kp F4             &trans       RSFT         RCTL         RALT         RGUI         &trans
+        &trans       &kp LGUI     &kp F1       &kp F2       &kp F3       &kp F4             &trans       RSHFT_KP     RCTRL_KP     RALT_KP      RGUI_KP      &trans
         &trans       &trans       &kp F5       &kp F6       &kp F7       &kp F8             &trans       &kp HOME     &kp PGDN     &kp PGUP     &kp END      &trans
                                                &trans       &trans       &trans             &trans       &trans       &trans
       >;

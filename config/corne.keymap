@@ -63,6 +63,7 @@
   #define LTBT &lt BT SPACE
   #define LTNUM &lt NUMPAD ESC
   #define LTNAV &lt NAV SPACE
+  #define LTSYML &lt SYMLFT ESC
 
   // Mod Shortcuts (renamed to avoid conflicts with ZMK deprecated/reserved macros)
   #define LSHT &kp LSHFT
@@ -81,15 +82,15 @@
       // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
       // │    TAB     │  A(GUI)    │  S(ALT)    │  D(CTRL)   │  F(SHFT)   │     G      │     │     H      │  J(SHFT)   │  K(CTRL)   │  L(ALT)    │  ;(GUI)    │   BSPC     │
       // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
-      // │   SHFT     │     Z      │     X      │     C      │     V      │     B      │     │     N      │     M      │     ,      │     .      │     /      │    RET     │
+      // │  CAPSWORD  │     Z      │     X      │     C      │     V      │     B      │     │     N      │     M      │     ,      │     .      │     /      │    RET     │
       // ├────────────┼────────────┼────────────┴────────────┼────────────┼────────────┤     ├────────────┼────────────┴────────────┼────────────┼────────────┼────────────┤
-      // │            │            │            │  SYMLFT    │ NAV/SPC    │  SPC/BT    │     │    SPC     │ ESC/NUM    │  SYMRGT    │            │            │            │
+      // │            │            │            │ SYMLFT/ESC │ NAV/SPC    │  SPC/BT    │     │    SPC     │ ESC/NUM    │  SYMRGT    │            │            │            │
       // └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘     └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘
       bindings = <
         &kp ESC      &kp Q        &kp W        &kp E        &kp R        &kp T              &kp Y        &kp U        &kp I        &kp O        &kp P        &kp ESC
         &kp TAB      HMA          HMS          HMD          HMF          &kp G              &kp H        HMJ          HMK          HML          HMSC         &kp BSPC
-        LSHT         &kp Z        &kp X        &kp C        &kp V        &kp B              &kp N        &kp M        &kp COMMA    &kp DOT      &kp FSLH     &kp RET
-                                               &mo SYMLFT   LTNAV        LTBT               &kp SPACE    LTNUM        &mo SYMRGT
+        &caps_word   &kp Z        &kp X        &kp C        &kp V        &kp B              &kp N        &kp M        &kp COMMA    &kp DOT      &kp FSLH     &kp RET
+                                               LTSYML       LTNAV        LTBT               &kp SPACE    LTNUM        &mo SYMRGT
       >;
     };
 
@@ -138,14 +139,14 @@
       // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
       // │    ---     │     0      │     1      │     2      │     3      │   BSPC     │     │    ---     │   RSHFT    │   RCTRL    │    RALT    │    RGUI    │    ---     │
       // ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤     ├────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
-      // │    ---     │   KP_DOT   │     4      │     5      │     6      │    EQL     │     │    ---     │    HOME    │    PGDN    │    PGUP    │    END     │    ---     │
+      // │    ---     │     .      │     4      │     5      │     6      │    EQL     │     │    ---     │    HOME    │    PGDN    │    PGUP    │    END     │    ---     │
       // ├────────────┼────────────┼────────────┴────────────┼────────────┼────────────┤     ├────────────┼────────────┴────────────┼────────────┼────────────┼────────────┤
       // │            │            │            │    ---     │    ---     │    ---     │     │    ---     │    ---     │    ---     │            │            │            │
       // └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘     └────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘
       bindings = <
         &trans       &kp KP_SLASH &kp N7       &kp N8       &kp N9       &kp KP_MINUS       &trans       &trans       &trans       &trans       &trans       &trans
         &trans       &kp N0       &kp N1       &kp N2       &kp N3       &kp BSPC           &trans       RSHFT_KP     RCTRL_KP     RALT_KP      RGUI_KP      &trans
-        &trans       &kp KP_DOT   &kp N4       &kp N5       &kp N6       &kp EQUAL          &trans       &kp HOME     &kp PGDN     &kp PGUP     &kp END      &trans
+        &trans       &kp DOT      &kp N4       &kp N5       &kp N6       &kp EQUAL          &trans       &kp HOME     &kp PGDN     &kp PGUP     &kp END      &trans
                                                &trans       &trans       &trans             &trans       &trans       &trans
       >;
     };
